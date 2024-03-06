@@ -8,24 +8,25 @@ Para compilar e executar este projeto, você precisa ter:
 
 JDK 8 ou superior
 Apache Maven
-Compilação
+
+# Compilação
 
 # Para compilar o projeto, siga as etapas abaixo:
 
 Clone o repositório para sua máquina local:
 
 ```sh
-git clone https://github.com/luanaf4/DicionarioJavaRMI.git.
+git clone https://github.com/luanaf4/DicionarioJavaRMI.git
 ```
 
 Navegue até o diretório do projeto 
 ```sh
-cd DicionarioJavaRMI.
+cd DicionarioJavaRMI
 ```
 
 Acesse o diretório src
 ```sh
-cd src.
+cd src
 ```
 
 Acesse o diretório main
@@ -47,3 +48,8 @@ Para executar o projeto, siga as etapas abaixo:
 - Inicie o servidor rodando Server.java
 - Inicie o Client rodando Client.java
 - Depois de iniciar o client, você pode utilizar o dicionário por meio da interface gráfica.
+
+# Bibliotecas
+
+- Gson: biblioteca open-source para converter objetos Java em sua representação JSON. Foi utilizado para a persistência dos dados.
+- Swing: biblioteca gráfica para Java.
