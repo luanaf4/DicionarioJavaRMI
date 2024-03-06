@@ -1,61 +1,68 @@
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.util.Scanner;
+import javax.swing.*;
+import java.awt.event.*;
 
 public class Client {
+    private static DictionaryService service;
+
     public static void main(String[] args) {
         try {
-            // Localiza o registro RMI no localhost
             Registry registry = LocateRegistry.getRegistry("localhost");
+            service = (DictionaryService) registry.lookup("DictionaryService");
 
-            // Busca a referência para o serviço de dicionário no registro RMI
-            DictionaryService service = (DictionaryService) registry.lookup("DictionaryService");
+            JFrame frame = new JFrame("Dicionário RMI");
+            frame.setSize(400, 300);
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-            Scanner scanner = new Scanner(System.in);
+            JButton btnConsultar = new JButton("Consultar palavra");
+            JButton btnAdicionar = new JButton("Adicionar palavra");
+            JButton btnRemover = new JButton("Remover palavra");
 
-            while(true) {
-                System.out.println("Escolha uma opção: ");
-                System.out.println("1. Consultar palavra");
-                System.out.println("2. Adicionar palavra");
-                System.out.println("3. Remover palavra");
-                System.out.println("4. Sair");
-
-                int option = scanner.nextInt();
-                scanner.nextLine();  // Consume newline left-over
-
-                switch(option) {
-                    case 1:
-                        System.out.println("Digite a palavra que deseja consultar: ");
-                        String word = scanner.nextLine();
-                        try {
-                            String meaning = service.getMeaning(word);
-                            System.out.println("Significado de " + word + ": " + meaning);
-                        } catch (WordNotFoundException e) {
-                            System.out.println(e.getMessage());
-                        }
-                        break;
-                    case 2:
-                        System.out.println("Digite a nova palavra: ");
-                        String newWord = scanner.nextLine();
-                        System.out.println("Digite o significado da nova palavra: ");
-                        String newMeaning = scanner.nextLine();
-                        service.addWord(newWord, newMeaning);
-                        System.out.println("Palavra adicionada com sucesso!");
-                        break;
-                    case 3:
-                        System.out.println("Digite a palavra que deseja remover: ");
-                        String removedWord = scanner.nextLine();
-                        service.removeWord(removedWord);
-                        System.out.println("Palavra removida com sucesso!");
-                        break;
-                    case 4:
-                        System.out.println("Saindo...");
-                        scanner.close();
-                        System.exit(0);
-                    default:
-                        System.out.println("Opção inválida. Tente novamente.");
+            btnConsultar.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    String word = JOptionPane.showInputDialog(frame, "Digite a palavra que deseja consultar:");
+                    try {
+                        String meaning = service.getMeaning(word);
+                        JOptionPane.showMessageDialog(frame, "Significado de " + word + ": " + meaning);
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(frame, ex.getMessage());
+                    }
                 }
-            }
+            });
+
+            btnAdicionar.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    String newWord = JOptionPane.showInputDialog(frame, "Digite a nova palavra:");
+                    String newMeaning = JOptionPane.showInputDialog(frame, "Digite o significado da nova palavra:");
+                    try {
+                        String result = service.addWord(newWord, newMeaning);
+                        JOptionPane.showMessageDialog(frame, result);
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(frame, ex.getMessage());
+                    }
+                }
+            });
+
+            btnRemover.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    String removedWord = JOptionPane.showInputDialog(frame, "Digite a palavra que deseja remover:");
+                    try {
+                        String result = service.removeWord(removedWord);
+                        JOptionPane.showMessageDialog(frame, result);
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(frame, ex.getMessage());
+                    }
+                }
+            });
+
+            JPanel panel = new JPanel();
+            panel.add(btnConsultar);
+            panel.add(btnAdicionar);
+            panel.add(btnRemover);
+            frame.add(panel);
+
+            frame.setVisible(true);
 
         } catch (Exception e) {
             System.err.println("Exceção do cliente: " + e.toString());

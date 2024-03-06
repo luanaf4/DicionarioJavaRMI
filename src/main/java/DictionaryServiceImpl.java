@@ -25,21 +25,21 @@ public class DictionaryServiceImpl extends UnicastRemoteObject implements Dictio
             return "Palavra já existe";
         } else {
             dictionary.put(word, meaning);
-            // Salva o dicionário no arquivo sempre que uma palavra é adicionada
+            // Salva a nova palavra no arquivo json
             PersistenceManager.save(dictionary);
             return "Palavra adicionada com sucesso";
         }
     }
 
     @Override
-    public String removeWord(String word) throws RemoteException {
+    public String removeWord(String word) throws RemoteException, WordNotFoundException {
         if (dictionary.containsKey(word)) {
             dictionary.remove(word);
-            // Salva o dicionário no arquivo sempre que uma palavra é removida
+            // Remove a palavra do arquivo json
             PersistenceManager.save(dictionary);
             return "Palavra removida com sucesso";
         } else {
-            return "Palavra não encontrada";
+            throw new WordNotFoundException("A palavra " + word + " não foi encontrada.");
         }
     }
 }
