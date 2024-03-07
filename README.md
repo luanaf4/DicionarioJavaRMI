@@ -6,8 +6,8 @@ Este repositório hospeda um aplicativo de dicionário simples implementado em J
 
 Para compilar e executar este projeto, você precisa ter:
 
-JDK 8 ou superior
-Apache Maven
+- JDK 8 ou superior
+- Apache Maven
 
 # Compilação
 
